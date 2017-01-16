@@ -125,20 +125,6 @@ Instead, just delete the frame as normal."
         (delete-frame frame t)
       ad-do-it)))
 
-(defadvice save-buffers-kill-terminal (around osx-pseudo-daemon activate)
-  "When killing an NS terminal, instead just delete all NS frames."
-  (let ((frame (selected-frame)))
-    (if (and osx-pseudo-daemon-mode
-             (eq 'ns (framep frame)))
-        ;; For NS GUI, just delete all NS frames. A new hidden one
-        ;; will automatically be spawned by the advice to
-        ;; `delete-frame'.
-        (mapc 'delete-frame 
-              (filtered-frame-list 
-               (lambda (frm) (eq (frame-terminal frm)
-                            (frame-terminal frame)))))
-      ad-do-it)))
-
 (provide 'osx-pseudo-daemon)
 
 ;;; osx-pseudo-daemon.el ends here
